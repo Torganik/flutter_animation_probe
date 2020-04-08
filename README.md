@@ -2,7 +2,7 @@
 
 ## Western sunset
 
-This app os a probe for create Implicit animations on flutter.
+This app is a probe for create Implicit animations on flutter.
 There is western desert sunset maked by implicit animation widgets.
 
 ![alt-текст](https://github.com/Torganik/flutter_animation_probe/blob/master/screenshots/Screenshot_1586337606.png "Screenshot")
