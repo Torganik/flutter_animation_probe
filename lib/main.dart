@@ -26,30 +26,24 @@ class TestApp3 extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Builder(builder: (BuildContext context) {
-          return MyTestApp3( MediaQuery
-              .of(context)
-              .size);
+          return MyTestApp3(MediaQuery.of(context).size);
         }));
   }
 }
 
 class MyTestApp3 extends StatefulWidget {
   Size _screenSize;
+
   MyTestApp3(this._screenSize);
+
   @override
   _MyTestApp3State createState() => _MyTestApp3State(_screenSize);
 }
 
 class _MyTestApp3State extends State<MyTestApp3> {
   final Size _screenSize;
+
   _MyTestApp3State(this._screenSize);
-
-  List<Color> _colors = [
-    Color.fromRGBO(0xed, 0x5b, 0x1e, 1),
-    Color.fromRGBO(0x1b, 0x0e, 0x28, 1)
-  ];
-
-  List<double> _stops = [0.0, 0.7];
 
   final double _sunStart = 330;
   final double _sunStartLeft = 250;
@@ -69,9 +63,15 @@ class _MyTestApp3State extends State<MyTestApp3> {
       _sunLeft = -350.0;
       _bgColor = Color.fromRGBO(0x1b, 0x0e, 0x28, 1);
       _sunSize = _sunSizeHW;
-      cloudLeft1*=cloudDuration/5;
-      cloudLeft2*=cloudDuration/5;
-      cloudLeft3*=cloudDuration/5;
+      cloudLeft1 = initCloudLeft1 *
+          (cloudDuration / 5) *
+          (cloudLeft1 / cloudLeft1 == 1 ? -1 : 1);
+      cloudLeft2 = initCloudLeft2 *
+          (cloudDuration / 5) *
+          (cloudLeft1 / cloudLeft2 == 1 ? -1 : 1);
+      cloudLeft3 = initCloudLeft3 *
+          (cloudDuration / 5) *
+          (cloudLeft1 / cloudLeft3 == 1 ? -1 : 1);
     });
   }
 
@@ -81,9 +81,9 @@ class _MyTestApp3State extends State<MyTestApp3> {
       _sunLeft = _sunStartLeft;
       _bgColor = Color.fromRGBO(0xed, 0x5b, 0x1e, 1);
       _sunSize = _sunSizeHWSmall;
-      cloudLeft1/=cloudDuration/5;
-      cloudLeft2/=cloudDuration/5;
-      cloudLeft3/=cloudDuration/5;
+      cloudLeft1 =initCloudLeft1;
+      cloudLeft2 =initCloudLeft2;
+      cloudLeft3 =initCloudLeft3;
     });
   }
 
@@ -97,7 +97,7 @@ class _MyTestApp3State extends State<MyTestApp3> {
 
   double _generateLeftCloud() {
     Random rnd = Random();
-    num newTop = rnd.nextInt(_screenSize.width/2 ~/ 1);
+    num newTop = rnd.nextInt(_screenSize.width / 2 ~/ 1);
     newTop = max(0, newTop);
 
     return newTop / 1.0;
@@ -109,6 +109,9 @@ class _MyTestApp3State extends State<MyTestApp3> {
   double cloudLeft1;
   double cloudLeft2;
   double cloudLeft3;
+  double initCloudLeft1;
+  double initCloudLeft2;
+  double initCloudLeft3;
 
   @override
   void initState() {
@@ -116,14 +119,16 @@ class _MyTestApp3State extends State<MyTestApp3> {
     cloudTop1 = _generateTopCloud();
     cloudTop2 = _generateTopCloud();
     cloudTop3 = _generateTopCloud();
-    cloudLeft1 = _generateLeftCloud();
-    cloudLeft2 = _generateLeftCloud();
-    cloudLeft3 = _generateLeftCloud();
+    initCloudLeft1 = _generateLeftCloud();
+    initCloudLeft2 = _generateLeftCloud();
+    initCloudLeft3 = _generateLeftCloud();
+    cloudLeft1 = initCloudLeft1;
+    cloudLeft2 = initCloudLeft2;
+    cloudLeft3 = initCloudLeft3;
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Stack(children: <Widget>[
       AnimatedContainer(
         duration: Duration(seconds: _duration),
@@ -186,7 +191,6 @@ class _MyTestApp3State extends State<MyTestApp3> {
           ),
         ),
       ),
-
       Positioned(
         bottom: 150,
         left: _screenSize.width / 4,
@@ -231,8 +235,7 @@ class SunPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final radius = min(size.height, size.width) / 2;
     final center = Offset(size.height / 2, size.width / 2);
-    final paint = Paint()
-      ..color = Colors.yellow;
+    final paint = Paint()..color = Colors.yellow;
     Color color1 = Color.fromRGBO(
         Colors.yellow.red, Colors.yellow.green, Colors.yellow.blue, 0.8);
     Color color2 = Color.fromRGBO(
@@ -240,12 +243,9 @@ class SunPainter extends CustomPainter {
     Color color3 = Color.fromRGBO(
         Colors.yellow.red, Colors.yellow.green, Colors.yellow.blue, 0.4);
 
-    final paintShine1 = Paint()
-      ..color = color1;
-    final paintShine2 = Paint()
-      ..color = color2;
-    final paintShine3 = Paint()
-      ..color = color3;
+    final paintShine1 = Paint()..color = color1;
+    final paintShine2 = Paint()..color = color2;
+    final paintShine3 = Paint()..color = color3;
 
     canvas.drawCircle(center, radius * 1.8, paintShine3);
     canvas.drawCircle(center, radius * 1.444, paintShine2);
@@ -304,7 +304,8 @@ class CactusPainter extends CustomPainter {
         Offset(size.width / 2 + size.width / 4, size.height / 2.5), 7, paint);
 
     // Middle
-    canvas.drawLine(Offset(45, lineWidth), Offset(45, size.height*1.2), paint);
+    canvas.drawLine(
+        Offset(45, lineWidth), Offset(45, size.height * 1.2), paint);
     canvas.drawCircle(Offset(45, 15), 7, paint);
   }
 
@@ -396,7 +397,7 @@ class Cloud extends StatelessWidget {
   Widget build(BuildContext context) {
     CustomPainter cp = _getPainter();
     return Opacity(
-      opacity:0.65555,
+      opacity: 0.65555,
       child: Container(
         child: CustomPaint(
           size: Size(100, 50),
@@ -408,7 +409,6 @@ class Cloud extends StatelessWidget {
 }
 
 class CloudTypeOnePainter extends CustomPainter {
-
   @override
   void paint(Canvas canvas, Size size) {
     final double _lineWidth = 30;
@@ -421,9 +421,8 @@ class CloudTypeOnePainter extends CustomPainter {
     canvas.drawLine(Offset(_lineWidth * 2, -_lineWidth + 10),
         Offset(size.width + 20, -_lineWidth + 10), paint);
     canvas.drawLine(Offset(0, 0), Offset(size.width * 1.5, 0), paint);
-    canvas.drawLine(
-        Offset(30, _lineWidth - 10), Offset(size.width, _lineWidth - 10),
-        paint);
+    canvas.drawLine(Offset(30, _lineWidth - 10),
+        Offset(size.width, _lineWidth - 10), paint);
   }
 
   @override
@@ -433,7 +432,6 @@ class CloudTypeOnePainter extends CustomPainter {
 }
 
 class CloudTypeTwosPainter extends CustomPainter {
-
   @override
   void paint(Canvas canvas, Size size) {
     final double _lineWidth = 30;
@@ -444,9 +442,8 @@ class CloudTypeTwosPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 
     canvas.drawLine(Offset(0, 0), Offset(size.width * 1.5, 0), paint);
-    canvas.drawLine(
-        Offset(-30, _lineWidth - 10), Offset(size.width - 30, _lineWidth - 10),
-        paint);
+    canvas.drawLine(Offset(-30, _lineWidth - 10),
+        Offset(size.width - 30, _lineWidth - 10), paint);
   }
 
   @override
@@ -455,9 +452,7 @@ class CloudTypeTwosPainter extends CustomPainter {
   }
 }
 
-
 class CloudTypeThreesPainter extends CustomPainter {
-
   @override
   void paint(Canvas canvas, Size size) {
     final double _lineWidth = 30;
@@ -468,9 +463,8 @@ class CloudTypeThreesPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round;
 
     canvas.drawLine(Offset(0, 0), Offset(size.width * 1.2, 0), paint);
-    canvas.drawLine(
-        Offset(30, _lineWidth - 50), Offset(size.width - 10, _lineWidth - 50),
-        paint);
+    canvas.drawLine(Offset(30, _lineWidth - 50),
+        Offset(size.width - 10, _lineWidth - 50), paint);
   }
 
   @override
@@ -478,4 +472,3 @@ class CloudTypeThreesPainter extends CustomPainter {
     return false;
   }
 }
-

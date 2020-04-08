@@ -1,6 +1,12 @@
-# flutter_animations
+# flutter_animations_probe
 
-A new Flutter project.
+##Western sunset
+
+This app os a probe for create Implicit animations on flutter.
+There is western desert sunset maked by implicit animation widgets.
+screenshots/Screenshot_1586337606.png
+
+
 
 ## Getting Started
 
