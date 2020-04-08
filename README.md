@@ -1,14 +1,17 @@
 # flutter_animations_probe
 
-##Western sunset
+## Western sunset
 
 This app os a probe for create Implicit animations on flutter.
 There is western desert sunset maked by implicit animation widgets.
-screenshots/Screenshot_1586337606.png
+
+![alt-текст](https://github.com/Torganik/flutter_animation_probe/blob/master/screenshots/Screenshot_1586337606.png "Screenshot")
+
+For start animation, tap on sun.
+For reverse animation - twise tap on right cactus.
 
 
-
-## Getting Started
+## Getting Started with Flutter
 
 This project is a starting point for a Flutter application.
 
